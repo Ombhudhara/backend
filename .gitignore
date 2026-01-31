@@ -135,6 +135,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+
+
 ### Node Patch ###
 # Serverless Webpack directories
 .webpack/
@@ -143,5 +145,10 @@ dist
 
 # SvelteKit build / generate output
 .svelte-kit
+
+node_modules/
+.env
+public/
+
 
 # End of https://www.toptal.com/developers/gitignore/api/node
