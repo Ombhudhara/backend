@@ -1,4 +1,4 @@
-# this practice for first backend project  
+# This practice for first backend project  
 model link:
 https://app.eraser.io/workspace/YtPqZ1VogxGy1jzIDkzj
 
