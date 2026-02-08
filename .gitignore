@@ -149,6 +149,7 @@ dist
 node_modules/
 .env
 public/
+notes.doc
 
 
 # End of https://www.toptal.com/developers/gitignore/api/node
