@@ -1,19 +1,29 @@
+import dns from "dns";
 import mongoose from "mongoose";
 import { DB_NAME } from "../constants.js";
 
+// Atlas SRV connections rely on DNS SRV lookups. Some environments (VPNs, local DNS proxies)
+// block SRV queries. Force a known public DNS server to avoid that.
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
-const connectDB = async() =>{
-    try{
-const connectionInstance=await mongoose.connect(`${process.env.MONGODB_URL}/${DB_NAME}`);
-console.log(`\n mongod connected succesfully!! DB host:$
-    {connectionInst
-    ance.connection.host}\n`);
-    }
-    catch(err)
-    {
-        console.log("MongoDB connection error(failed):", err);
-        process.exit(1); // Exit the process with an error code  In Node.js:
-    }
-// process.exit(0) → means the program ended successfully ✅ , process.exit(1) → means the program ended due to an error ❌
-    }
+const connectDB = async () => {
+  try {
+    const baseUrl = process.env.MONGODB_URL;
+    if (!baseUrl) throw new Error("MONGODB_URL is not defined in environment");
+
+    // If the connection string is SRV (mongodb+srv), it already contains the DB name.
+    // Otherwise, append the DB name so we can support both forms.
+    const uri = baseUrl.startsWith("mongodb+srv://")
+      ? baseUrl
+      : baseUrl.includes("?")
+      ? `${baseUrl.split("?")[0]}/${DB_NAME}?${baseUrl.split("?")[1]}`
+      : `${baseUrl}/${DB_NAME}`;
+
+    const connectionInstance = await mongoose.connect(uri);
+    console.log(`\n mongod connected succesfully!! DB host: ${connectionInstance.connection.host}\n`);
+  } catch (err) {
+    console.log("MongoDB connection error(failed):", err);
+    process.exit(1);
+  }
+};
 export default connectDB;

@@ -1,8 +1,9 @@
 //this file is use make method and handle the error in async function
  const asyncHandler=(requestHandle) => {
-    (req,res,next)=>{
+    return (req,res,next)=>{
         Promise.resolve(requestHandle(req,res,next)).catch((err)=>next(err))
     }
+
     
  }
 
